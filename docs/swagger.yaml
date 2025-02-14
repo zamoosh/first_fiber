@@ -1,0 +1,43 @@
+basePath: /
+host: localhost:8000
+info:
+  contact:
+    email: fiber@swagger.io
+    name: API Support
+  description: This is a sample swagger for Fiber
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Mohammad Test
+  version: "0.0"
+paths:
+  /:
+    get:
+      description: Root endpoint with ali ali ali
+      responses:
+        "200":
+          description: hello root!
+          schema:
+            type: string
+      summary: Get Root docs
+      tags:
+      - default
+  /value/{value}:
+    get:
+      description: Get value by parameter
+      parameters:
+      - description: Value
+        in: path
+        name: value
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 'value is: <value>'
+          schema:
+            type: string
+      summary: Get Value
+      tags:
+      - default
+swagger: "2.0"
