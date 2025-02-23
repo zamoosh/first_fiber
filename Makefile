@@ -16,3 +16,7 @@ install_deps:
 
 watch:
 	find . -name "*.go" | entr -r make run
+
+# gi is stands for `gitmoji`
+gi:
+	nodeactivate ; git add . ; gitmoji -c

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/charmbracelet/log"
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
@@ -33,13 +35,14 @@ var (
 )
 
 func getItems(ctx *fiber.Ctx) error {
-	log.Print("Items were sent")
-	return ctx.Status(200).JSON(items)
+	return ctx.Status(fiber.StatusOK).JSON(items)
 }
 
 func getItem(ctx *fiber.Ctx) error {
 	id, err := ctx.ParamsInt("id")
-	if err != nil {return ctx.Status(400).JSON(Msg{"ali ali ali"})}
+	if err != nil {
+		return ctx.Status(fiber.StatusNotFound).JSON(Msg{"ali ali ali"})
+	}
 
 	for _, item := range items {
 		if item.Id == id {
@@ -48,6 +51,20 @@ func getItem(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.Status(400).JSON(Msg{"Item didn't found"})
+}
+
+func createItem(ctx *fiber.Ctx) error {
+	var item Item
+	err := ctx.BodyParser(&item)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(Msg{fmt.Sprintf("could not read. err: %s", err)})
+	}
+
+	log.Warn(item)
+	item.Id = len(items) + 1
+
+	items = append(items, item)
+	return ctx.Status(fiber.StatusCreated).JSON(Msg{"Item created successfully!"})
 }
 
 func main() {
