@@ -1,16 +1,18 @@
 package main
 
 import (
-	"log"
+	// "log"
 
 	"first_fiber/handlers"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
+	"github.com/charmbracelet/log"
 )
 
 func main() {
 	_ = godotenv.Load()
+	log.Info("Application started!")
 
 	config := fiber.Config{
 		Prefork:       true,
@@ -21,6 +23,8 @@ func main() {
 	}
 	app := fiber.New(config)
 
+	app.Static("static", "./static", fiber.Static{MaxAge: 10, Browse: true})
+
 	app.Get("/", handlers.Root)
 	app.Get("/value/:value", handlers.Value)
 	app.Get("/name/:name?", handlers.Name)
@@ -30,8 +34,8 @@ func main() {
 		},
 	)
 
-	err := app.Listen("127.0.0.1:3000")
+	err := app.Listen("127.0.0.1:8000")
 	if err != nil {
-		log.Fatalln("Could not listen on port 8000", err)
+		log.Fatalf("Could not listen on port 8000. err: %s \n", err)
 	}
 }

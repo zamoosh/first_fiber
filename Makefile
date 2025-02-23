@@ -13,3 +13,6 @@ swagger:
 install_deps:
 	go get github.com/gofiber/fiber/v2
 	go get -u gorm.io/gorm
+
+watch:
+	find . -name "*.go" | entr -r make run
