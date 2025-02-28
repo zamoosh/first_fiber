@@ -25,6 +25,7 @@ var (
 		StrictRouting: true,
 		AppName:       "first_fiber",
 		ServerHeader:  "first_fiber",
+		Immutable:     true,
 	}
 
 	items = []Item{
@@ -67,13 +68,20 @@ func createItem(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusCreated).JSON(Msg{"Item created successfully!"})
 }
 
+func middleware(ctx *fiber.Ctx) error {
+	fmt.Println("ali ali ali", ctx)
+	return ctx.Next()
+}
+
 func main() {
 	_ = godotenv.Load()
 	log.Info("ENV Loaded")
 
 	app := fiber.New(config)
-	app.Get("/item", getItems)
-	app.Get("/item/:id", getItem)
+	app.Get("/api/item", getItems)
+	app.Get("/api/item/:id<int>", getItem)
+	app.Post("/api/item", createItem)
+	app.Use("/api", middleware)
 
 	err := app.Listen("0.0.0.0:3000")
 	if err != nil {
