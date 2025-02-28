@@ -20,12 +20,13 @@ type Msg struct {
 
 var (
 	config = fiber.Config{
-		Prefork:       true,
-		CaseSensitive: true,
-		StrictRouting: true,
-		AppName:       "first_fiber",
-		ServerHeader:  "first_fiber",
-		Immutable:     true,
+		// Prefork:       true,
+		EnablePrintRoutes: true,
+		CaseSensitive:     true,
+		StrictRouting:     true,
+		AppName:           "first_fiber",
+		ServerHeader:      "first_fiber",
+		Immutable:         true,
 	}
 
 	items = []Item{
@@ -35,42 +36,47 @@ var (
 	}
 )
 
-func getItems(ctx *fiber.Ctx) error {
-	return ctx.Status(fiber.StatusOK).JSON(items)
+func getItems(c *fiber.Ctx) error {
+	return c.Status(fiber.StatusOK).JSON(items)
 }
 
-func getItem(ctx *fiber.Ctx) error {
-	id, err := ctx.ParamsInt("id")
+func getItem(c *fiber.Ctx) error {
+	id, err := c.ParamsInt("id")
 	if err != nil {
-		return ctx.Status(fiber.StatusNotFound).JSON(Msg{"ali ali ali"})
+		return c.Status(fiber.StatusNotFound).JSON(Msg{"ali ali ali"})
 	}
 
 	for _, item := range items {
 		if item.Id == id {
-			return ctx.JSON(item)
+			return c.JSON(item)
 		}
 	}
 
-	return ctx.Status(400).JSON(Msg{"Item didn't found"})
+	return c.Status(400).JSON(Msg{"Item didn't found"})
 }
 
-func createItem(ctx *fiber.Ctx) error {
+func createItem(c *fiber.Ctx) error {
 	var item Item
-	err := ctx.BodyParser(&item)
+	err := c.BodyParser(&item)
 	if err != nil {
-		return ctx.Status(fiber.StatusBadRequest).JSON(Msg{fmt.Sprintf("could not read. err: %s", err)})
+		return c.Status(fiber.StatusBadRequest).JSON(Msg{fmt.Sprintf("could not read. err: %s", err)})
 	}
 
 	log.Warn(item)
 	item.Id = len(items) + 1
 
 	items = append(items, item)
-	return ctx.Status(fiber.StatusCreated).JSON(Msg{"Item created successfully!"})
+	return c.Status(fiber.StatusCreated).JSON(Msg{"Item created successfully!"})
 }
 
-func middleware(ctx *fiber.Ctx) error {
-	fmt.Println("ali ali ali", ctx)
-	return ctx.Next()
+func middleware(c *fiber.Ctx) error {
+	return c.Next()
+}
+
+func getError(c *fiber.Ctx) error {
+	// return fiber.NewError(fiber.StatusBadRequest, "ali ali ali")
+	// c.Response().Header.Add("Content-Type", "application/json; charset=utf-8")
+	return c.SendStatus(fiber.StatusFailedDependency)
 }
 
 func main() {
@@ -78,10 +84,11 @@ func main() {
 	log.Info("ENV Loaded")
 
 	app := fiber.New(config)
+	app.Use("/api", middleware)
 	app.Get("/api/item", getItems)
 	app.Get("/api/item/:id<int>", getItem)
 	app.Post("/api/item", createItem)
-	app.Use("/api", middleware)
+	app.Get("/api/error", getError)
 
 	err := app.Listen("0.0.0.0:3000")
 	if err != nil {
