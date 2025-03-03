@@ -5,7 +5,7 @@ full_run:
 	swag init -g cmd/main.go ; yes | swag fmt ; go run cmd/main.go
 
 run:
-	go run cmd/main.go
+	go run cmd3/main.go
 
 swagger:
 	swag init -g cmd/main.go
