@@ -21,6 +21,7 @@ func Verify(c *fiber.Ctx) error {
 	var data VerifySerializer
 	_ = json.Unmarshal(c.Request().Body(), &data)
 	if data.Username == "zamoosh" && data.Password == "66569211" {
+		c.Response().Header.Set("Authorization", "Bearer 1234567890")
 		return c.Status(fiber.StatusOK).SendString("Authorized Successfully")
 	}
 	return c.Status(fiber.StatusBadRequest).SendString("Username or Password is wrong")

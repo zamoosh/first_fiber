@@ -5,9 +5,11 @@ import (
 
 	"first_fiber/handlers/client/admin/user"
 	"first_fiber/handlers/client/auth"
+	"first_fiber/handlers/client/auth/middlewares"
 
 	"github.com/charmbracelet/log"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/joho/godotenv"
 )
 
@@ -26,9 +28,11 @@ func main() {
 	log.Info("ENV Loaded")
 
 	app := fiber.New(config)
+	app.Use(logger.New(logger.Config{TimeZone: "Asia/Tehran"}))
 
-	userApi := app.Group(user.Path)
-	userApi.Get("", user.List)
+	userApiAdmin := app.Group(user.Path)
+	userApiAdmin.Use(middlewares.Verify)
+	userApiAdmin.Get("", user.List)
 
 	authApi := app.Group(auth.Path)
 	authApi.Post("", auth.Verify)
