@@ -12,7 +12,7 @@ import (
 func main() {
 	_ = godotenv.Load()
 
-	token, err := utils.GenerateAccessToken(10)
+	token, err := utils.GenerateToken(10, utils.RefreshToken)
 	if err != nil {
 		log.Error(err)
 		os.Exit(1)

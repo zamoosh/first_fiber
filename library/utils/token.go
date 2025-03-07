@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"os"
 	"strings"
 	"time"
@@ -9,13 +10,20 @@ import (
 	"github.com/google/uuid"
 )
 
-func GenerateAccessToken(userId uint, exp ...time.Duration) (string, error) {
+// GenerateToken accepts userId and [TokenType]. Optionally you can give it expiration time in `exp` parameter.
+func GenerateToken(userId uint, tokenType TokenType, exp ...time.Duration) (string, error) {
 	if len(exp) == 0 {
 		exp = append(exp, day)
 	}
 
-	claims := jwtClaims{
-		TokenType: "access",
+	switch tokenType {
+	case RefreshToken, AccessToken:
+	default:
+		return "", fmt.Errorf("invalid token type: %s, choices are `%s` and `%s`", tokenType, AccessToken, RefreshToken)
+	}
+
+	claims := jwtClaim{
+		TokenType: tokenType,
 		Exp:       uint64(time.Now().UTC().Add(exp[0]).Unix()),
 		Iat:       uint64(time.Now().UTC().Unix()),
 		Jti:       strings.Replace(uuid.New().String(), "-", "", -1),

@@ -35,6 +35,6 @@ func main() {
 	db.Table(user.ClientUser{}.TableName()).Count(&count)
 	fmt.Println(count)
 
-	fmt.Println(utils.GeneratePassword("66569211"))
+	fmt.Println(utils.Hash("66569211"))
 
 }
