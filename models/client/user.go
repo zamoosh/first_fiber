@@ -1,4 +1,4 @@
-package user
+package client
 
 import (
 	"fmt"
@@ -8,6 +8,7 @@ import (
 type ClientUser struct {
 	Id        uint   `gorm:"primaryKey"`
 	Username  string `gorm:"unique;not null"`
+	Password  string
 	Cellphone string `gorm:"unique;not null"`
 	FirstName string
 	LastName  string

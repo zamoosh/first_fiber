@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/charmbracelet/log"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )
@@ -22,7 +23,7 @@ func GenerateToken(userId uint, tokenType TokenType, exp ...time.Duration) (stri
 		return "", fmt.Errorf("invalid token type: %s, choices are `%s` and `%s`", tokenType, AccessToken, RefreshToken)
 	}
 
-	claims := jwtClaim{
+	claims := JwtClaim{
 		TokenType: tokenType,
 		Exp:       uint64(time.Now().UTC().Add(exp[0]).Unix()),
 		Iat:       uint64(time.Now().UTC().Unix()),
@@ -42,15 +43,24 @@ func GenerateToken(userId uint, tokenType TokenType, exp ...time.Duration) (stri
 	return t, nil
 }
 
-func VerifyToken(t string) (bool, error) {
+func GetToken(t string) (*jwt.Token, error) {
+	token, err := openToken(t)
+	if err != nil {
+		return nil, err
+	}
+	return token, nil
+}
+
+func openToken(t string) (*jwt.Token, error) {
+	t = t[7:]
 	token, err := jwt.Parse(
 		t, func(token *jwt.Token) (interface{}, error) {
 			return []byte(os.Getenv("SECRET_KEY")), nil
 		},
 	)
 	if err != nil {
-		return false, err
+		log.Errorf("error parsing token. %s", err)
+		return nil, err
 	}
-
-	return token.Valid, nil
+	return token, nil
 }

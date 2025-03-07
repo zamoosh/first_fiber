@@ -3,10 +3,14 @@ package auth
 import (
 	"encoding/json"
 
+	"first_fiber/databases"
+	"first_fiber/handlers"
+	"first_fiber/library/utils/auth"
+	"first_fiber/models/client"
+
+	"github.com/charmbracelet/log"
 	"github.com/gofiber/fiber/v2"
 )
-
-
 
 type VerifySerializer struct {
 	Username string `json:"username"`
@@ -19,10 +23,28 @@ const (
 
 func Verify(c *fiber.Ctx) error {
 	var data VerifySerializer
-	_ = json.Unmarshal(c.Request().Body(), &data)
-	if data.Username == "zamoosh" && data.Password == "66569211" {
-		c.Response().Header.Set("Authorization", "Bearer 1234567890")
-		return c.Status(fiber.StatusOK).SendString("Authorized Successfully")
+	err := json.Unmarshal(c.Request().Body(), &data)
+	if err != nil {
+		return handlers.BadRequest(c, "دیتای ارسالی معتبر نیست")
 	}
-	return c.Status(fiber.StatusBadRequest).SendString("Username or Password is wrong")
+
+	var user client.ClientUser
+	db, _ := databases.GetPostgres()
+	result := db.Where("username = ? OR cellphone = ?", data.Username, data.Username).First(&user)
+	if result.Error != nil {
+		log.Errorf("db error hapened. %s", result.Error)
+	}
+
+	if !auth.Compare(user.Password, data.Password) {
+		return handlers.BadRequest(c, "نام کاربری یا رمز عبور اشتباه است")
+	}
+
+	t, _ := auth.GenerateToken(user.Id, auth.AccessToken)
+
+	c.Response().Header.Set("Authorization", t)
+	return c.Status(fiber.StatusOK).JSON(handlers.Msg{Msg: "شما با موفقیت وارد شدید"})
+}
+
+func IsVerify(c *fiber.Ctx) error {
+	return c.SendString("client is verified")
 }

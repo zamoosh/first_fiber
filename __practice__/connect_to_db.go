@@ -6,7 +6,7 @@ import (
 	"first_fiber"
 	"first_fiber/databases"
 	"first_fiber/library/utils"
-	"first_fiber/models/user"
+	"first_fiber/models/client"
 
 	"github.com/charmbracelet/log"
 )
@@ -19,7 +19,7 @@ func main() {
 
 	db, _ := databases.GetPostgres()
 
-	// var users []user.ClientUser
+	// var users []client.ClientUser
 	// if err := db.Debug().Find(&users).Error; err != nil {
 	// 	log.Errorf("Could not get users. %s", err)
 	// }
@@ -27,12 +27,12 @@ func main() {
 	// 	fmt.Println(users[i])
 	// }
 
-	var zamoosh user.ClientUser
+	var zamoosh client.ClientUser
 	db.Where("username = ?", "09392511300").First(&zamoosh)
 	fmt.Println(zamoosh)
 
 	var count int64
-	db.Table(user.ClientUser{}.TableName()).Count(&count)
+	db.Table(client.ClientUser{}.TableName()).Count(&count)
 	fmt.Println(count)
 
 	fmt.Println(utils.Hash("66569211"))

@@ -5,5 +5,5 @@ import (
 )
 
 const (
-	Path = admin.Path + "user" + "/"
+	Path = admin.Path + "client" + "/"
 )
