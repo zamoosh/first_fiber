@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"first_fiber/library/utils"
+	"first_fiber/library/utils/auth"
 
 	"github.com/charmbracelet/log"
 	"github.com/joho/godotenv"
@@ -12,14 +12,14 @@ import (
 func main() {
 	_ = godotenv.Load()
 
-	token, err := utils.GenerateToken(10, utils.RefreshToken)
+	token, err := auth.GenerateToken(10, auth.RefreshToken)
 	if err != nil {
 		log.Error(err)
 		os.Exit(1)
 	}
 	log.Info(token)
 
-	valid, err := utils.VerifyToken(token)
+	valid, err := auth.VerifyToken(token)
 	if err != nil {
 		log.Error(err)
 		os.Exit(1)
