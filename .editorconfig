@@ -6,19 +6,17 @@ root = true
 end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
-
-[*.{js,ts,py,go,html,css}]
 charset = utf-8
 
-[*.{js,ts,html,css}]
+[*.{js,ts,html,css,scss,sass}]
 indent_size = 2
 indent_style = tab
 
-[*.py]
+[*.{py,sql}]
 indent_size = 4
 indent_style = space
 
-[*.go]
+[*.{go,mod,sum}]
 indent_style = tab
 indent_size = 4
 
@@ -26,6 +24,6 @@ indent_size = 4
 indent_size = 4
 indent_style = tab
 
-[*{Dockerfile,.yaml}]
+[*{Dockerfile,.yaml,yml}]
 indent_size = 2
 indent_style = tab
