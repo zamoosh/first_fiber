@@ -23,7 +23,7 @@ func GenerateToken(userId uint, tokenType TokenType, exp ...time.Duration) (stri
 		return "", fmt.Errorf("invalid token type: %s, choices are `%s` and `%s`", tokenType, AccessToken, RefreshToken)
 	}
 
-	claims := JwtClaim{
+	claims := jwtClaim{
 		TokenType: tokenType,
 		Exp:       uint64(time.Now().UTC().Add(exp[0]).Unix()),
 		Iat:       uint64(time.Now().UTC().Unix()),
@@ -54,7 +54,8 @@ func GetToken(t string) (*jwt.Token, error) {
 func openToken(t string) (*jwt.Token, error) {
 	t = t[7:]
 	token, err := jwt.Parse(
-		t, func(token *jwt.Token) (interface{}, error) {
+		t,
+		func(token *jwt.Token) (interface{}, error) {
 			return []byte(os.Getenv("SECRET_KEY")), nil
 		},
 	)

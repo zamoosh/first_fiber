@@ -2,6 +2,8 @@ package auth
 
 import (
 	"encoding/json"
+	"fmt"
+	"time"
 
 	"first_fiber/databases"
 	"first_fiber/handlers"
@@ -39,12 +41,14 @@ func Verify(c *fiber.Ctx) error {
 		return handlers.BadRequest(c, "نام کاربری یا رمز عبور اشتباه است")
 	}
 
-	t, _ := auth.GenerateToken(user.Id, auth.AccessToken)
+	t, _ := auth.GenerateToken(user.Id, auth.AccessToken, time.Second * 10)
 
 	c.Response().Header.Set("Authorization", t)
 	return c.Status(fiber.StatusOK).JSON(handlers.Msg{Msg: "شما با موفقیت وارد شدید"})
 }
 
 func IsVerify(c *fiber.Ctx) error {
+	user := c.Locals("user").(client.ClientUser)
+	fmt.Printf("User: %s\n", user)
 	return c.SendString("client is verified")
 }

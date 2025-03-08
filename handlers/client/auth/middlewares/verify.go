@@ -1,7 +1,6 @@
 package middlewares
 
 import (
-	"fmt"
 	"reflect"
 	"time"
 
@@ -47,7 +46,6 @@ func Verify(c *fiber.Ctx) error {
 	for iter.Next() {
 		data[iter.Key().String()] = iter.Value().Interface()
 	}
-	fmt.Println(data)
 
 	if userId, ok := data["user_id"]; !ok || userId == 0 {
 		log.Warn("token has been manipulated")
