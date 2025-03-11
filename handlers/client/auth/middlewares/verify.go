@@ -46,8 +46,8 @@ func Verify(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusUnauthorized).JSON(handlers.Msg{Msg: "توکن معتبر نیست"})
 	}
 
-	var user client.ClientUser
-	db, _ := databases.GetPostgres()
+	var user client.User
+	db := databases.GetPostgres()
 	db.Where("id = ?", data["user_id"]).First(&user)
 	c.Locals("user", user)
 	return c.Next()

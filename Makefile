@@ -1,6 +1,9 @@
 tidy:
 	go mod tidy
 
+start-db:
+	docker start postgres-16.3-temp
+
 full_run:
 	swag init -g cmd/main.go ; yes | swag fmt ; go run cmd/main.go
 

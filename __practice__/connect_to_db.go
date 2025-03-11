@@ -27,12 +27,12 @@ func main() {
 	// 	fmt.Println(users[i])
 	// }
 
-	var zamoosh client.ClientUser
+	var zamoosh client.User
 	db.Where("username = ?", "09392511300").First(&zamoosh)
 	fmt.Println(zamoosh)
 
 	var count int64
-	db.Table(client.ClientUser{}.TableName()).Count(&count)
+	db.Table(client.User{}.TableName()).Count(&count)
 	fmt.Println(count)
 
 	fmt.Println(utils.Hash("66569211"))

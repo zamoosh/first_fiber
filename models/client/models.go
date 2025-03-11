@@ -3,22 +3,25 @@ package client
 import (
 	"fmt"
 	"strings"
+
+	"first_fiber/models/agency"
 )
 
-type ClientUser struct {
+type User struct {
 	Id        uint   `gorm:"primaryKey"`
 	Username  string `gorm:"unique;not null"`
 	Password  string
 	Cellphone string `gorm:"unique;not null"`
 	FirstName string
 	LastName  string
+	AgencySet []agency.Agency
 }
 
-func (ClientUser) TableName() string {
+func (User) TableName() string {
 	return "client_user"
 }
 
-func (u ClientUser) String() (fullName string) {
+func (u User) String() (fullName string) {
 	fullName = fmt.Sprintf("%s %s", u.FirstName, u.LastName)
 	return strings.Replace(fullName, " ", "", 1)
 }

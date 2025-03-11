@@ -16,9 +16,9 @@ var (
 )
 
 // GetPostgres creates a connection to Postgres Database.
-func GetPostgres() (*gorm.DB, error) {
+func GetPostgres() *gorm.DB {
 	if PostgresDB != nil {
-		return PostgresDB, nil
+		return PostgresDB
 	}
 
 	// dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", user, password, host, port, databases)
@@ -39,13 +39,13 @@ func GetPostgres() (*gorm.DB, error) {
 	var err error
 	PostgresDB, err = gorm.Open(postgres.New(cnf), &gorm.Config{})
 	if err != nil {
-		return nil, err
+		log.Fatalf("Could not open connection. %s", err)
 	}
 
 	sqlDB, err := PostgresDB.DB()
 
 	if err != nil {
-		return nil, err
+		log.Fatalf("Could not get sqlDB. %s", err)
 	}
 
 	sqlDB.SetMaxIdleConns(10)
@@ -53,5 +53,5 @@ func GetPostgres() (*gorm.DB, error) {
 	sqlDB.SetConnMaxLifetime(time.Minute)
 
 	log.Info("POSTGRES LOADED")
-	return PostgresDB, nil
+	return PostgresDB
 }
