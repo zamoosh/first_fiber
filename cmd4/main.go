@@ -2,7 +2,8 @@ package main
 
 import (
 	"first_fiber"
-	"first_fiber/handlers/client/agency"
+	agencyAdmin "first_fiber/handlers/agency/admin"
+	clientAgency "first_fiber/handlers/client/agency"
 	"first_fiber/handlers/client/auth"
 	"first_fiber/handlers/client/auth/middlewares"
 
@@ -33,7 +34,9 @@ func main() {
 	app.Post("/verify", auth.Verify)
 
 	app.Get("/is-verify", middlewares.Verify, auth.IsVerify)
-	app.Get("/get-agency", middlewares.Verify, agency.GetAgency)
+	app.Get("/get-agency", middlewares.Verify, clientAgency.GetAgency)
+
+	agencyAdmin.PreparePath(app)
 
 	err = app.Listen("127.0.0.1:3000")
 	if err != nil {
