@@ -1,5 +1,5 @@
 package agency
 
 const (
-	AppName string = "Agency"
+	AppName string = "agency"
 )

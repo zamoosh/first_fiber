@@ -37,7 +37,7 @@ func GetPostgres() *gorm.DB {
 	}
 
 	var err error
-	PostgresDB, err = gorm.Open(postgres.New(cnf), &gorm.Config{})
+	PostgresDB, err = gorm.Open(postgres.New(cnf))
 	if err != nil {
 		log.Fatalf("Could not open connection. %s", err)
 	}

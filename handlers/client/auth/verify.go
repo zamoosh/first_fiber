@@ -18,10 +18,6 @@ type VerifySerializer struct {
 	Password string `json:"password"`
 }
 
-const (
-	Path string = "/api/client/auth/verify/"
-)
-
 func Verify(c *fiber.Ctx) error {
 	var data VerifySerializer
 	err := json.Unmarshal(c.Request().Body(), &data)

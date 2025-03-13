@@ -23,7 +23,7 @@ func GenerateToken(userId uint, tokenType TokenType, exp ...time.Duration) (stri
 		return "", fmt.Errorf("invalid token type: %s, choices are `%s` and `%s`", tokenType, AccessToken, RefreshToken)
 	}
 
-	claims := jwtClaim{
+	claims := JwtClaim{
 		TokenType: tokenType,
 		Exp:       uint64(time.Now().UTC().Add(exp[0]).Unix()),
 		Iat:       uint64(time.Now().UTC().Unix()),

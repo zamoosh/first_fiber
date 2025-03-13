@@ -1,11 +1,9 @@
-package admin
+package auth
 
 import (
-	"fmt"
-
 	"first_fiber/handlers"
 	"first_fiber/handlers/agency"
-	api "first_fiber/handlers/agency/admin/agency"
+	clientAgency "first_fiber/handlers/client/agency"
 	"first_fiber/handlers/client/auth/middlewares"
 
 	"github.com/gofiber/fiber/v2"
@@ -16,7 +14,8 @@ const (
 )
 
 func PreparePath(app *fiber.App) {
-	app.Use(middlewares.Verify)
-	app.Get(fmt.Sprintf("%s:id<int>", Path), api.Retrieve)
-}
+	app.Post("/verify", Verify)
 
+	app.Get("/is-verify", middlewares.Verify, IsVerify)
+	app.Get("/get-agency", middlewares.Verify, clientAgency.GetAgency)
+}

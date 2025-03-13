@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	"errors"
 	"time"
 
 	"first_fiber/databases"
@@ -8,47 +9,52 @@ import (
 	"first_fiber/library/utils/auth"
 	"first_fiber/models/client"
 
-	"github.com/charmbracelet/log"
 	"github.com/gofiber/fiber/v2"
-	"github.com/golang-jwt/jwt/v5"
 )
 
-func Verify(c *fiber.Ctx) error {
-	// r := recover()
-	// if r != nil {
-	// 	log.Errorf("internal error. %s", r)
-	// }
-
-	jwtStr := string(c.Request().Header.Peek("Authorization"))
-
+func checkToken(jwtStr string) (*auth.JwtClaim, error) {
 	token, err := auth.GetToken(jwtStr)
 
 	if token == nil || err != nil || !token.Valid {
-		return c.Status(fiber.StatusUnauthorized).JSON(handlers.Msg{Msg: "توکن معتبر نیست"})
+		return nil, errors.New("توکن معتبر نیست")
 	}
 
 	exp, err := token.Claims.GetExpirationTime()
 	if exp == nil || err != nil {
-		return c.Status(fiber.StatusUnauthorized).JSON(handlers.Msg{Msg: "توکن معتبر نیست"})
+		return nil, errors.New("توکن معتبر نیست")
 	}
 
 	if time.Now().UTC().After(exp.Time) {
-		return c.Status(fiber.StatusUnauthorized).JSON(handlers.Msg{Msg: "توکن شما باطل شده است"})
+		return nil, errors.New("توکن شما باطل شده است")
 	}
 
-	data, ok := token.Claims.(jwt.MapClaims)
-	if !ok {
-		return c.Status(fiber.StatusUnauthorized).JSON(handlers.Msg{Msg: "توکن معتبر نیست"})
-	}
+	return auth.ToJwtClaim(token.Claims)
+}
 
-	if userId, ok := data["user_id"]; !ok || userId == 0 {
-		log.Warn("token has been manipulated")
-		return c.Status(fiber.StatusUnauthorized).JSON(handlers.Msg{Msg: "توکن معتبر نیست"})
+func Verify(c *fiber.Ctx) error {
+	jwtStr := string(c.Request().Header.Peek("Authorization"))
+	jwtClaim, err := checkToken(jwtStr)
+	if err != nil {
+		return c.Status(fiber.StatusUnauthorized).JSON(handlers.Msg{Msg: err.Error()})
 	}
 
 	var user client.User
 	db := databases.GetPostgres()
-	db.Where("id = ?", data["user_id"]).First(&user)
+	db.Where("id = ?", jwtClaim.UserId).First(&user)
+	c.Locals("user", user)
+	return c.Next()
+}
+
+func VerifyAndIsAdmin(c *fiber.Ctx) error {
+	jwtStr := string(c.Request().Header.Peek("Authorization"))
+	jwtClaim, err := checkToken(jwtStr)
+	if err != nil {
+		return c.Status(fiber.StatusUnauthorized).JSON(handlers.Msg{Msg: err.Error()})
+	}
+
+	var user client.User
+	db := databases.GetPostgres()
+	db.Where("id = ?", jwtClaim.UserId).First(&user)
 	c.Locals("user", user)
 	return c.Next()
 }
