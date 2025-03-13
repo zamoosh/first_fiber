@@ -16,7 +16,7 @@ const (
 )
 
 func PreparePath(app *fiber.App) {
-	app.Use(middlewares.Verify)
+	app.Use(middlewares.VerifyAndIsAdmin)
 	app.Get(fmt.Sprintf("%s:id<int>", Path), api.Retrieve)
 }
 

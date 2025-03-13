@@ -18,7 +18,7 @@ const (
 	AccessToken  TokenType = "access"
 )
 
-// JwtClaim, extends the [jwt.Claims] and adds UserId and TokenType to it.
+// JwtClaim extends the [jwt.Claims] and adds UserId and TokenType to it.
 type JwtClaim struct {
 	TokenType TokenType `json:"token_type"`
 	Exp       uint64    `json:"exp"`

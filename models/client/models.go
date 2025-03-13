@@ -8,13 +8,15 @@ import (
 )
 
 type User struct {
-	Id        uint   `gorm:"primaryKey"`
-	Username  string `gorm:"unique;not null"`
-	Password  string
-	Cellphone string `gorm:"unique;not null"`
-	FirstName string
-	LastName  string
-	AgencySet []agency.Agency
+	Id          uint   `gorm:"primaryKey"`
+	Username    string `gorm:"unique;not null"`
+	Password    string
+	Cellphone   string `gorm:"unique;not null"`
+	FirstName   string
+	LastName    string
+	IsStaff     string
+	IsSuperuser string
+	AgencySet   []agency.Agency
 }
 
 func (User) TableName() string {

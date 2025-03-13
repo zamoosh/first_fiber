@@ -7,7 +7,7 @@ type Agency struct {
 	Name    string
 	Active  bool
 	Deleted *time.Time
-	UserID  uint `gorm:"index"`
+	UserID  *uint `gorm:"index"`
 }
 
 func (Agency) TableName() string {

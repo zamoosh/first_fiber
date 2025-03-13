@@ -52,9 +52,12 @@ func VerifyAndIsAdmin(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusUnauthorized).JSON(handlers.Msg{Msg: err.Error()})
 	}
 
-	var user client.User
+	user := new(client.User)
 	db := databases.GetPostgres()
-	db.Where("id = ?", jwtClaim.UserId).First(&user)
+	db.Where("id = ? AND is_superuser = TRUE AND is_staff = TRUE", jwtClaim.UserId).First(user)
 	c.Locals("user", user)
+	if user == nil {
+		return c.Status(fiber.StatusForbidden).JSON(handlers.Msg{Msg: "شما کاربر ادمین نیستید"})
+	}
 	return c.Next()
 }
