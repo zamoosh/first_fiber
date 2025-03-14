@@ -12,6 +12,18 @@ charset = utf-8
 indent_size = 2
 indent_style = tab
 
+[*.html]
+ij_html_align_attributes = true
+ij_html_attribute_wrap = split_into_lines
+ij_html_text_wrap = split_into_lines
+ij_html_block_comment_add_space = true
+ij_html_align_text = true
+ij_html_keep_whitespaces = false
+ij_html_line_comment_at_first_column = false
+ij_html_block_comment_at_first_column = false
+ij_html_enforce_quotes = true
+ij_html_quote_style = double
+
 [*.{py,sql}]
 indent_size = 4
 indent_style = space
@@ -19,6 +31,11 @@ indent_style = space
 [*.{go,mod,sum}]
 indent_style = tab
 indent_size = 4
+ij_go_import_sorting = gofmt
+ij_go_move_all_imports_in_one_declaration = true
+ij_go_fill_paragraph_width = 120
+ij_go_run_go_fmt_on_reformat = true
+ij_go_add_parentheses_for_single_import = true
 
 [Makefile]
 indent_size = 4

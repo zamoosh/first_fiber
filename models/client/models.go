@@ -5,18 +5,12 @@ import (
 	"strings"
 
 	"first_fiber/models/agency"
+	"first_fiber/models/client/base"
 )
 
 type User struct {
-	Id          uint   `gorm:"primaryKey"`
-	Username    string `gorm:"unique;not null"`
-	Password    string
-	Cellphone   string `gorm:"unique;not null"`
-	FirstName   string
-	LastName    string
-	IsStaff     string
-	IsSuperuser string
-	AgencySet   []agency.Agency
+	base.AbstractUser
+	AgencySet []agency.Agency
 }
 
 func (User) TableName() string {
