@@ -6,17 +6,6 @@ import (
 	"first_fiber/models/client/base"
 )
 
-type User interface {
-	GetId() uint
-	GetUsername() string
-	GetPassword() string
-	GetCellphone() string
-	GetFirstname() string
-	GetLastname() string
-	GetIsStaff() bool
-	GetIsSuperuser() bool
-}
-
 type Agency struct {
 	Id        uint `gorm:"primaryKey;index"`
 	Name      string

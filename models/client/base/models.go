@@ -5,6 +5,17 @@ import (
 	"strings"
 )
 
+type User interface {
+	GetId() uint
+	GetUsername() string
+	GetPassword() string
+	GetCellphone() string
+	GetFirstname() string
+	GetLastname() string
+	GetIsStaff() bool
+	GetIsSuperuser() bool
+}
+
 type AbstractUser struct {
 	Id          uint   `gorm:"primaryKey"`
 	Username    string `gorm:"unique;not null"`
