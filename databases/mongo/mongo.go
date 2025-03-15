@@ -32,8 +32,6 @@ func MC() *mongo.Client {
 	if err != nil {
 		log.Fatalf("can not connect to mongo. err: %s", err.Error())
 	}
-
-	log.Info("MONGO LOADED")
 	return DB
 }
 

@@ -4,7 +4,6 @@ import (
 	"os"
 
 	"first_fiber/library/custom_log"
-	"github.com/charmbracelet/log"
 	"github.com/joho/godotenv"
 )
 
@@ -27,7 +26,7 @@ func loadPostgres() {
 	PostgresHost = os.Getenv("POSTGRES_HOST")
 	PostgresName = os.Getenv("POSTGRES_NAME")
 	PostgresPort = os.Getenv("POSTGRES_PORT")
-	log.Info("PostgresDB CONFIGS LOADED")
+	custom_log.L.Info("PostgresDB CONFIGS LOADED")
 }
 
 func loadMongo() {
@@ -36,12 +35,12 @@ func loadMongo() {
 	PostgresHost = os.Getenv("MONGO_HOST")
 	PostgresName = os.Getenv("MONGO_NAME")
 	PostgresPort = os.Getenv("MONGO_PORT")
-	log.Info("MongoDB CONFIGS LOADED")
+	custom_log.L.Info("MongoDB CONFIGS LOADED")
 }
 
 func loadLogger() {
-	custom_log.PrepareLogger()
-	log.Info("LOGGER LOADED")
+	custom_log.L.Success("LOGGER LOADED")
+	custom_log.L.Info("LOGGER LOADED")
 }
 
 func LoadConf() error {
@@ -49,11 +48,13 @@ func LoadConf() error {
 	if err != nil {
 		return err
 	}
-	log.Info("ENV LOADED")
+
+	loadLogger()
+
+	custom_log.L.Info("ENV LOADED")
 
 	loadPostgres()
 	loadMongo()
-	loadLogger()
 
 	return nil
 }
