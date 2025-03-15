@@ -3,7 +3,6 @@ package mongo
 import (
 	"context"
 	"fmt"
-	"os"
 
 	"first_fiber"
 	"github.com/charmbracelet/log"
@@ -37,8 +36,13 @@ func MC() *mongo.Client {
 
 // MCD is equal  to MongoClientDatabase
 // simply use the MC and the default database in .env file
-func MCD() *mongo.Database {
-	return MC().Database(os.Getenv("MONGO_DB_NAME"))
+//
+// Default value for database is MONGO_NAME in .env file
+func MCD(database ...string) *mongo.Database {
+	if len(database) == 0 {
+		database = append(database, first_fiber.MongoName)
+	}
+	return MC().Database(database[0])
 }
 
 // Checks if given collection name exists or not

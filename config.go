@@ -30,27 +30,26 @@ func loadPostgres() {
 }
 
 func loadMongo() {
-	PostgresUser = os.Getenv("MONGO_USER")
-	PostgresPassword = os.Getenv("MONGO_PASS")
-	PostgresHost = os.Getenv("MONGO_HOST")
-	PostgresName = os.Getenv("MONGO_NAME")
-	PostgresPort = os.Getenv("MONGO_PORT")
+	MongoUser = os.Getenv("MONGO_USER")
+	MongoPassword = os.Getenv("MONGO_PASS")
+	MongoHost = os.Getenv("MONGO_HOST")
+	MongoName = os.Getenv("MONGO_NAME")
+	MongoPort = os.Getenv("MONGO_PORT")
 	custom_log.L.Info("MongoDB CONFIGS LOADED")
 }
 
 func loadLogger() {
-	custom_log.L.Success("LOGGER LOADED")
+	custom_log.Default()
 	custom_log.L.Info("LOGGER LOADED")
 }
 
 func LoadConf() error {
+	loadLogger()
+
 	err := godotenv.Load()
 	if err != nil {
 		return err
 	}
-
-	loadLogger()
-
 	custom_log.L.Info("ENV LOADED")
 
 	loadPostgres()
