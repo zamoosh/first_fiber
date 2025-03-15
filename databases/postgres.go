@@ -24,11 +24,11 @@ func GetPostgres() *gorm.DB {
 	// dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", user, password, host, port, databases)
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Tehran",
-		first_fiber.Host,
-		first_fiber.User,
-		first_fiber.Password,
-		first_fiber.Db,
-		first_fiber.Port,
+		first_fiber.PostgresHost,
+		first_fiber.PostgresUser,
+		first_fiber.PostgresPassword,
+		first_fiber.PostgresName,
+		first_fiber.PostgresPort,
 	)
 
 	cnf := postgres.Config{

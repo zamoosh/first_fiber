@@ -21,7 +21,7 @@ func main() {
 
 	// var users []client.ClientUser
 	// if err := db.Debug().Find(&users).Error; err != nil {
-	// 	log.Errorf("Could not get users. %s", err)
+	// 	custom_log.Errorf("Could not get users. %s", err)
 	// }
 	// for i := 0; i < len(users); i++ {
 	// 	fmt.Println(users[i])

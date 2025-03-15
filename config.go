@@ -3,17 +3,46 @@ package first_fiber
 import (
 	"os"
 
+	"first_fiber/library/custom_log"
 	"github.com/charmbracelet/log"
 	"github.com/joho/godotenv"
 )
 
 var (
-	User       string
-	Password   string
-	Host       string
-	Db         string
-	Port       string
+	PostgresUser     string
+	PostgresPassword string
+	PostgresHost     string
+	PostgresName     string
+	PostgresPort     string
+	MongoUser        string
+	MongoPassword    string
+	MongoHost        string
+	MongoName        string
+	MongoPort        string
 )
+
+func loadPostgres() {
+	PostgresUser = os.Getenv("POSTGRES_USER")
+	PostgresPassword = os.Getenv("POSTGRES_PASS")
+	PostgresHost = os.Getenv("POSTGRES_HOST")
+	PostgresName = os.Getenv("POSTGRES_NAME")
+	PostgresPort = os.Getenv("POSTGRES_PORT")
+	log.Info("PostgresDB CONFIGS LOADED")
+}
+
+func loadMongo() {
+	PostgresUser = os.Getenv("MONGO_USER")
+	PostgresPassword = os.Getenv("MONGO_PASS")
+	PostgresHost = os.Getenv("MONGO_HOST")
+	PostgresName = os.Getenv("MONGO_NAME")
+	PostgresPort = os.Getenv("MONGO_PORT")
+	log.Info("MongoDB CONFIGS LOADED")
+}
+
+func loadLogger() {
+	custom_log.PrepareLogger()
+	log.Info("LOGGER LOADED")
+}
 
 func LoadConf() error {
 	err := godotenv.Load()
@@ -22,12 +51,9 @@ func LoadConf() error {
 	}
 	log.Info("ENV LOADED")
 
-	User = os.Getenv("POSTGRES_USER")
-	Password = os.Getenv("POSTGRES_PASS")
-	Host = os.Getenv("POSTGRES_HOST")
-	Db = os.Getenv("POSTGRES_NAME")
-	Port = os.Getenv("POSTGRES_PORT")
-	log.Info("DB CONFIGS LOADED")
+	loadPostgres()
+	loadMongo()
+	loadLogger()
 
 	return nil
 }
